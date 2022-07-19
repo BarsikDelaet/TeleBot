@@ -1,0 +1,1 @@
+MESSAGE_WORLD = "Хай пис"
