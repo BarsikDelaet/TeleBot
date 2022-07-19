@@ -1,12 +1,11 @@
 import requests
+from func_bot.service import Service
 from config import open_weather_token
 from telebot import types
 from deep_translator import GoogleTranslator
 
 
-class Weather:
-    def __init__(self, bot) -> None:
-        self.bot = bot
+class Weather(Service):
 
     def get_city_for_weather(self, message) -> None:
         """Читаем и передаем город для вывода погоды"""
