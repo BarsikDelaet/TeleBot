@@ -1,4 +1,8 @@
+"""Читаем город, проверяем его на существование, выводим погоду.
+В случае ошибки написания города выводим сообщение """
+__author__ = "Барсуков М.О."
 import requests
+from message_text import MESSAGE_TEXT
 from func_bot.service import Service
 from config import open_weather_token
 from telebot import types
@@ -17,15 +21,17 @@ class Weather(Service):
         city_tok = types.KeyboardButton('Токио')  # Под клавиатурная кнопка "Токио"
         markup.add(city_yar, city_mos, city_ny, city_tok, stop)  # Создаем кнопки и задаем порядок
 
-        self.bot.send_message(message.chat.id, 'В каком городе мне узнать погоду?', reply_markup=markup)
+        self.bot.send_message(message.chat.id, MESSAGE_TEXT.MEESAGE_CITY_WEATHER, reply_markup=markup)
         self.bot.register_next_step_handler(message, self.get_weather)  # Читаем сообщение и передаем его в обработчик погоды
     
-    def get_weather(self, message):  # Выдвет погоду по запросу
+    def get_weather(self, message):  # Выдаёт погоду по запросу
         self.bot.delete_message(message.chat.id, message.message_id)  # Удаляет сообщение с городом
         self.bot.delete_message(message.chat.id, message.message_id - 1)  # Удаляет сообщение с /stop
-        if message.text == '/stop':  # Если сообщие было /stop
+
+        if message.text == '/stop':  # Если сообщение было /stop
             self.stop_weather(message)  # Вызывает функцию /stop
             return  # Завершает функцию
+
         try:  # Проверка города
             geo = requests.get(  # Определяет данные полученного города
                 f"http://api.openweathermap.org/geo/1.0/direct?q={message.text}&appid={open_weather_token}"
@@ -60,7 +66,6 @@ class Weather(Service):
             city_ny = types.KeyboardButton('Нью-Йорк')
             city_tok = types.KeyboardButton('Токио')
             markup.add(city_yar, city_mos, city_ny, city_tok, stop)  # Добавляем кнопки
-    
             self.bot.send_message(message.chat.id, f"Город: <b>{name}</b>\n"  # Выводим полученную погоду
                                               f"Температура: <b>{temp}°C</b>\n"
                                               f"Погодные условия: <b>{description} над головой\n</b>"
@@ -70,9 +75,9 @@ class Weather(Service):
         except Exception as ex:  # Если была ошибка
             print(ex)
             self.bot.send_message(message.chat.id, f'Я не знаю город {message.text}')  # Сообщаем об ошибке
+
         finally:  # В любом случае предлагаем закончить узнавать погоду
-            self.bot.send_message(message.chat.id, 'Для того чтоб закончить узнавать погоду напиши\n'
-                                                   '*/stop*')
+            self.bot.send_message(message.chat.id, MESSAGE_TEXT.MESSAGE_EXIT_WEATHER)
             self.bot.register_next_step_handler(message, self.stop_weather)  # Передаем сообщение в разветвитель
 
     def stop_weather(self, message):

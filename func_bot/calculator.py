@@ -2,6 +2,7 @@
 После предлагает повторить или перейти к другим функциям."""
 __author__ = "Барсуков М.О."
 from telebot import types
+from message_text import MESSAGE_TEXT
 from func_bot.service import Service
 
 
@@ -55,8 +56,7 @@ class Calculator(Service):
                 num2 = float(numbers[1])
             except Exception as ex:  # Если была допущена ошибка сообщаем о проблеме
                 print(ex)
-                self.bot.send_message(message.chat.id, 'Что-то не так с числами((\n'
-                                                       'Напиши их заново')
+                self.bot.send_message(message.chat.id, MESSAGE_TEXT.MESSAGE_NO_NUMBERS)
                 self.bot.register_next_step_handler(message, self.action_calculator, action, result)
                 return
         else:  # Если вычисления были спрашиваем 1 число
@@ -66,8 +66,7 @@ class Calculator(Service):
                 num2 = float(numbers[0])
             except Exception as ex:  # Если была допущена ошибка сообщаем о проблеме
                 print(ex)
-                self.bot.send_message(message.chat.id, 'Что-то не так с числом((\n'
-                                                       'Напиши его заново')
+                self.bot.send_message(message.chat.id, MESSAGE_TEXT.MESSAGE_NO_NUMBER)
                 self.bot.register_next_step_handler(message, self.action_calculator, action, result)
                 return
 

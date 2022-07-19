@@ -1,3 +1,3 @@
-TOKEN = '###'
+TOKEN = '***'
 user_namebot = '@SnowBadgerBot'
-open_weather_token = "###"
+open_weather_token = "***"
