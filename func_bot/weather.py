@@ -83,8 +83,8 @@ class Weather(Service):
     def stop_weather(self, message):
         """Заканчивает или продолжает работу с погодой"""
         if message.text == '/stop':  # Если сообщение было
-            self.bot.delete_message(message.chat.id, message.message_id)  # Удаляет сообщение '/stop'
-            self.bot.delete_message(message.chat.id, message.message_id - 1)  # Удаляет сообщение с /stop
+            self.bot.delete_message(message.chat.id, message.message_id - 1)  # Удаляет сообщение '/stop'
+            self.bot.delete_message(message.chat.id, message.message_id)  # Удаляет сообщение с /stop
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)  # Объявляем кнопки и размерность
             help_button = types.KeyboardButton('/help')  # Кнопки help и Что умеешь?
             question = types.KeyboardButton('Что умеешь?')
